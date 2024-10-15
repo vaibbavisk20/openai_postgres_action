@@ -74,8 +74,24 @@ runs:
 
           # Set environment variables to answer prompts
           azd env set AZURE_LOCATION ${{ inputs.location }}
-          azd env set AZURE_OPENAI_LOCATION ${{ inputs.openai-location }}
           azd env set GITHUB_ACTIONS true
+
+          # Set open ai location if provided, else default to rg location
+          if ([string]::IsNullOrEmpty("${{ inputs.openai-location }}")) {
+            azd env set AZURE_OPENAI_RESOURCE_LOCATION  ${{ inputs.location }}
+          } else {
+            azd env set AZURE_OPENAI_RESOURCE_LOCATION  ${{ inputs.openai-location }}
+          }
+
+          # Set additional environment variables
+          if (-not [string]::IsNullOrEmpty($env:INPUT_ARGS)) {
+            $jsonObject = ConvertFrom-Json -InputObject $env:INPUT_ARGS -AsHashtable
+            foreach ($key in $jsonObject.Keys) {
+              $value = $jsonObject[$key]
+              azd env set $key $value
+            }
+          }
+          azd env get-values
 
           # Run prerequisites
           dir
