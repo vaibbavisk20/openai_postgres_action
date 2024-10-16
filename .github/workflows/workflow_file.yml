@@ -47,10 +47,9 @@ jobs:
           location: ${{ vars.AZURE_LOCATION }}
           env-name: ${{ vars.AZURE_ENV_NAME }}
           openai-location: ${{ vars.AZURE_OPENAI_LOCATION }}
-          documentintelligence-location: ${{ vars.AZURE_DOCUMENTINTELLIGENCE_LOCATION }}
           # optional parameters
           additional-args: '{
-            "AZURE_APP_SERVICE_SKU":"B2", 
+            "AZURE_OPENAI_CHAT_MODEL":"gpt-4o-mini", 
             }'
           # bring-your-own-data: true
           # data-path: "mydata"
